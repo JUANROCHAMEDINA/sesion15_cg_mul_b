@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>MDN Games: Three.js demo</title>
+    <style>
+        body { margin: 0; padding: 0; font-size: 0; }
+        canvas { width: 100%; height: 100%; }
+    </style>
+</head>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> // Librería three.js
+<script>
+
+    var WIDTH = window.innerWidth; 
+    var HEIGHT = window.innerHeight; 
+
+
+    var renderer = new THREE.WebGLRenderer({antialias:true}); 
+    renderer.setSize(WIDTH, HEIGHT); // tamaño de la ventana
+    renderer.setClearColor(0x000000, 1); //  textura de la ventana
+    document.body.appendChild(renderer.domElement); // este es el renderizado
+
+    var scene = new THREE.Scene();
+
+    var camera = new THREE.PerspectiveCamera(15, window.innerWidth / window.innerHeight, 0.1, 100);
+
+   
+    // coordenadas para la  posicion de la camara
+    camera.position.z = 30;
+    camera.position.y = 15;
+    camera.position.x = -10;
+    camera.lookAt(-2,0,0);
+    scene.add(camera); 
+   
+ 
+    const ejesXYZ = new THREE.AxesHelper( 100);
+    scene.add( ejesXYZ );
+
+
+     //se realiza la funcion para realizar el cono
+    function cono(nuevo){  
+        var altura;             // variable para la altura del cono
+        var diametro =2;        //diametro del cono
+        var lados = 10;         // numero de lados que tendra el cono
+
+           // realizamos un condicional que si nuevo es false entonces este tendra altura de 1 en caso contrario sera de 3
+             if (nuevo ==false){
+                  altura =1;
+               }
+
+
+                else {
+                 altura =3;
+           }
+
+        var coneGeometry = new THREE.ConeGeometry(diametro,altura,lados);  // este constructor tiene 3 parametros y anteriormente ya los asignamos con  las variables
+        var basicMaterial = new THREE.MeshLambertMaterial({color: 0xFF5733}); // agragamos la textura al cono 
+        var cone = new THREE.Mesh(coneGeometry, basicMaterial);
+        scene.add(cone);
+
+
+        cone.rotation.set(Math.PI/2, 0, 0); //asignamos la rotacion de este en pi medios en el eje x 
+        cone.position.z=altura/2;       // tambien adignamos una posicion en z en el cual la altura se dividira en 2
+         camera.lookAt(0,0,0);
+
+}
+      cono(true);
+
+    
+    var light = new THREE.PointLight(0xFFFFFF);
+    light.position.set(-5,10,15);
+    scene.add(light);
+    function render() { 
+    requestAnimationFrame(render); 
+    renderer.render(scene, camera); 
+
+    }
+
+render();
+</script>
+</body>
+</html>
